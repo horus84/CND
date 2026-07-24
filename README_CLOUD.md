@@ -12,12 +12,19 @@ To run the full matrix:
 
 ## Kaggle Execution Commands
 
-1. **Setup Environment**:
+1. **Clone the Repository in Kaggle**:
+   In your Kaggle Notebook cell, run:
+   ```bash
+   !git clone <YOUR_GITHUB_REPO_URL>
+   %cd context_no_delete
+   ```
+
+2. **Setup Environment**:
    ```bash
    !pip install -r requirements.txt
    ```
 
-2. **Generate Full Dataset**:
+3. **Generate Full Dataset**:
    ```bash
    !python scripts/generate_pilot.py
    ```

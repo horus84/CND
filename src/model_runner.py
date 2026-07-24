@@ -4,7 +4,7 @@ import json
 import random
 import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from .schemas import ModelOutput
+from .schemas import ModelOutput, ALLOWED_TOOLS
 
 class ModelRunner:
     def __init__(self, model_name: str = "Qwen/Qwen2.5-1.5B-Instruct", seed: int = 42):
@@ -21,9 +21,15 @@ class ModelRunner:
         self.model.eval()
         
     def generate(self, prompt: str, strategy: str) -> ModelOutput:
-        system_prompt = """You are an AI assistant processing user requests. 
+        tools_json = json.dumps(ALLOWED_TOOLS, indent=2)
+        system_prompt = f"""You are an AI assistant processing user requests. 
 Analyze the provided history/context and determine the final required action.
 You MUST output EXACTLY one JSON object and nothing else. Do not wrap in markdown blocks.
+
+--- ALLOWED TOOLS ---
+{tools_json}
+---------------------
+
 Format:
 {
   "tool": "tool_name",

@@ -59,3 +59,41 @@ class ModelOutput(BaseModel):
     model_revision: str = ""
     transformers_version: str = ""
     random_seed: int = 42
+
+ALLOWED_TOOLS = [
+    {
+        "name": "create_calendar_event",
+        "description": "Schedule a new event on the calendar.",
+        "arguments": ["time", "day", "event"]
+    },
+    {
+        "name": "send_email",
+        "description": "Send an email to a recipient.",
+        "arguments": ["target", "topic"]
+    },
+    {
+        "name": "book_travel",
+        "description": "Book a flight or travel ticket.",
+        "arguments": ["destination"]
+    },
+    {
+        "name": "book_shopping",
+        "description": "Purchase an item.",
+        "arguments": ["item"]
+    },
+    {
+        "name": "create_appointment_event",
+        "description": "Schedule a new appointment.",
+        "arguments": ["time", "day"]
+    },
+    {
+        "name": "confirm_calendar",
+        "description": "Confirm a calendar update.",
+        "arguments": ["time", "day"]
+    },
+    {
+        "name": "confirm_appointment",
+        "description": "Confirm an appointment update.",
+        "arguments": ["time", "day"]
+    }
+]

@@ -38,6 +38,18 @@ def main():
         json.dump(agg, f, indent=2)
         
     print("Evaluation completed. Saved to runs/pilot/metrics.json")
+    print("\n--- Summary of Key Metrics ---")
+    
+    strategies = ["full_history", "recent_turns", "garbage_collected_history", "active_state"]
+    print(f"{'Strategy':<30} | {'Strict Accuracy':<15} | {'Tolerant Accuracy':<20} | {'Stale Reuse'}")
+    print("-" * 85)
+    for s in strategies:
+        strict = agg.get(f"{s}_tool_accuracy", 0.0)
+        tolerant = agg.get(f"{s}_tolerant_tool_accuracy", 0.0)
+        stale = agg.get(f"{s}_stale_reuse", 0.0)
+        print(f"{s:<30} | {strict*100:>14.1f}% | {tolerant*100:>19.1f}% | {stale*100:>10.1f}%")
+    
+    print("\n")
     
     with open("runs/pilot/PILOT_DECISION.md", "w", encoding="utf-8") as f:
         f.write("# Pilot Decision\n\n")

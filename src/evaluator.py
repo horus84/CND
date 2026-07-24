@@ -20,7 +20,10 @@ class Evaluator:
             "clarification_needed": int(example.expected_clarification_behavior is not None),
             "clarification_predicted": int(output.clarification is not None),
             "prompt_tokens": output.prompt_tokens,
-            "latency_s": output.latency_s
+            "latency_s": output.latency_s,
+            "tolerant_tool_accuracy": 0,
+            "tolerant_arg_exact_match": 0,
+            "tolerant_field_accuracy": 0.0
         }
         
         def norm(val):
@@ -40,8 +43,25 @@ class Evaluator:
         if args_gold:
             matched = sum(1 for k, v in args_gold.items() if args_pred.get(k) == v)
             result["field_accuracy"] = matched / len(args_gold)
+            
+            # Tolerant Value Matching (Semantic check ignoring keys)
+            pred_values = list(args_pred.values())
+            tolerant_matched = sum(1 for v in args_gold.values() if v in pred_values)
+            result["tolerant_field_accuracy"] = tolerant_matched / len(args_gold)
+            
+            if tolerant_matched == len(args_gold):
+                result["tolerant_arg_exact_match"] = 1
+                result["tolerant_tool_accuracy"] = 1 # If values match, the intent was likely correct
         elif not args_gold and not args_pred:
             result["field_accuracy"] = 1.0
+            result["tolerant_field_accuracy"] = 1.0
+            result["tolerant_arg_exact_match"] = 1
+            result["tolerant_tool_accuracy"] = 1
+        elif not args_gold and args_pred:
+            # Expected nothing, got something
+            result["tolerant_field_accuracy"] = 0.0
+            result["tolerant_arg_exact_match"] = 0
+            result["tolerant_tool_accuracy"] = 0
             
         stale = False
         for field, vals in example.superseded_values.items():
@@ -78,7 +98,7 @@ class Evaluator:
             strat = r["strategy"]
             for m in ["tool_accuracy", "arg_exact_match", "field_accuracy", "stale_reuse", 
                      "accidental_deletion", "cancellation_failure", "rollback_accuracy",
-                     "prompt_tokens", "latency_s"]:
+                     "prompt_tokens", "latency_s", "tolerant_tool_accuracy", "tolerant_arg_exact_match", "tolerant_field_accuracy"]:
                 
                 if m == "cancellation_failure" and r["operation_type"] != "cancellation": continue
                 if m == "rollback_accuracy" and r["operation_type"] != "rollback": continue
