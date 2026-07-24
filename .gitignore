@@ -3,4 +3,4 @@ __pycache__/
 *$py.class
 .pytest_cache/
 runs/
-data/
+!data/pilot/pilot_examples.jsonl
