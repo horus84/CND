@@ -69,4 +69,10 @@ class StateTracker:
         return copy.deepcopy(self.active)
 
     def get_superseded_values(self) -> Dict[str, List[Any]]:
-        return copy.deepcopy(self.superseded)
+        cleaned = {}
+        for k, vals in self.superseded.items():
+            active_val = self.active.get(k)
+            filtered = [v for v in vals if v != active_val]
+            if filtered:
+                cleaned[k] = filtered
+        return cleaned

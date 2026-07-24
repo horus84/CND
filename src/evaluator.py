@@ -65,8 +65,11 @@ class Evaluator:
             
         stale = False
         for field, vals in example.superseded_values.items():
+            active_val = norm(example.final_active_state.get(field))
             for v in vals:
-                if norm(v) in args_pred.values():
+                norm_v = norm(v)
+                # A value is only stale if it is NOT the current active gold value!
+                if norm_v != active_val and norm_v in args_pred.values():
                     stale = True
                     break
             if stale: break
