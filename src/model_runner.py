@@ -31,20 +31,20 @@ You MUST output EXACTLY one JSON object and nothing else. Do not wrap in markdow
 ---------------------
 
 Format:
-{
+{{
   "tool": "tool_name",
-  "arguments": {
+  "arguments": {{
     "...": "..."
-  },
+  }},
   "clarification": null
-}
+}}
 
 If you need to clarify something or an action is cancelled without a new one, output:
-{
+{{
   "tool": null,
-  "arguments": {},
+  "arguments": {{}},
   "clarification": "Your clarification question or acknowledgement"
-}"""
+}}"""
 
         messages = [
             {"role": "system", "content": system_prompt},
