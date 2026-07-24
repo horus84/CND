@@ -46,6 +46,7 @@ class PilotExample(BaseModel):
     expected_normalized_tool_arguments: Dict[str, Any]
     ambiguity_status: bool
     expected_clarification_behavior: Optional[str]
+    oracle_clean_turns: List[ConversationTurn] = Field(default_factory=list)
     
 class ModelOutput(BaseModel):
     tool: Optional[str] = None

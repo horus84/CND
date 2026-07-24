@@ -40,7 +40,7 @@ def main():
     print("Evaluation completed. Saved to runs/pilot/metrics.json")
     print("\n--- Summary of Key Metrics ---")
     
-    strategies = ["full_history", "recent_turns", "garbage_collected_history", "active_state"]
+    strategies = ["full_history", "recent_turns", "garbage_collected_history", "active_state", "oracle_clean_history"]
     print(f"{'Strategy':<30} | {'Strict Accuracy':<15} | {'Tolerant Accuracy':<20} | {'Stale Reuse'}")
     print("-" * 85)
     for s in strategies:

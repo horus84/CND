@@ -25,10 +25,10 @@ def apply_active_state(example: PilotExample) -> Tuple[str, int]:
         lines.append("--- UNRESOLVED AMBIGUITIES ---")
         lines.append("Ambiguity present.")
         
-    lines.append("--- LATEST TURNS ---")
-    recent = example.conversation_turns[-2:]
-    for t in recent:
-        lines.append(f"{t.role.capitalize()}: {t.content}")
+    lines.append("--- CURRENT USER REQUEST ---")
+    # Include ONLY the last user turn, avoiding assistant turns that may leak superseded values
+    last_user_turn = [t for t in example.conversation_turns if t.role == "user"][-1]
+    lines.append(f"User: {last_user_turn.content}")
         
     prompt = "\n".join(lines)
     return prompt, len(prompt.split())
@@ -55,9 +55,17 @@ def apply_garbage_collected_history(example: PilotExample) -> Tuple[str, int]:
     prompt = "\n".join(lines)
     return prompt, len(prompt.split())
 
+def apply_oracle_clean_history(example: PilotExample) -> Tuple[str, int]:
+    turns = []
+    for t in example.oracle_clean_turns:
+        turns.append(f"{t.role.capitalize()}: {t.content}")
+    prompt = "\n".join(turns)
+    return prompt, len(prompt.split())
+
 STRATEGIES = {
     "full_history": apply_full_history,
     "recent_turns": apply_recent_turns,
     "active_state": apply_active_state,
-    "garbage_collected_history": apply_garbage_collected_history
+    "garbage_collected_history": apply_garbage_collected_history,
+    "oracle_clean_history": apply_oracle_clean_history
 }

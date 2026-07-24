@@ -49,7 +49,10 @@ def generate_examples() -> List[PilotExample]:
             expected_tool_name=f"create_{domain.value}_event",
             expected_normalized_tool_arguments={"time": "3 PM", "day": "Saturday"},
             ambiguity_status=False,
-            expected_clarification_behavior=None
+            expected_clarification_behavior=None,
+            oracle_clean_turns=[
+                ConversationTurn(role="user", content="Schedule a meeting for Saturday at 3 PM.")
+            ]
         )
         examples.append(ex)
         
@@ -83,7 +86,10 @@ def generate_examples() -> List[PilotExample]:
             expected_tool_name=f"send_{domain.value}",
             expected_normalized_tool_arguments={"target": "Priya", "topic": "Project update"},
             ambiguity_status=False,
-            expected_clarification_behavior=None
+            expected_clarification_behavior=None,
+            oracle_clean_turns=[
+                ConversationTurn(role="user", content="Send a message to Priya about the project update.")
+            ]
         )
         # Fix superseded to include deleted items for evaluating stale reuse
         superseded = tracker.get_superseded_values()
@@ -121,7 +127,10 @@ def generate_examples() -> List[PilotExample]:
             expected_tool_name=None,
             expected_normalized_tool_arguments={},
             ambiguity_status=False,
-            expected_clarification_behavior="acknowledge_cancellation"
+            expected_clarification_behavior="acknowledge_cancellation",
+            oracle_clean_turns=[
+                ConversationTurn(role="user", content="Nevermind, I don't want to buy anything.")
+            ]
         )
         examples.append(ex)
 
@@ -155,7 +164,10 @@ def generate_examples() -> List[PilotExample]:
             expected_tool_name=f"book_{domain.value}",
             expected_normalized_tool_arguments={"destination": "Paris"},
             ambiguity_status=False,
-            expected_clarification_behavior=None
+            expected_clarification_behavior=None,
+            oracle_clean_turns=[
+                ConversationTurn(role="user", content="Book a flight to Paris.")
+            ]
         )
         examples.append(ex)
 
@@ -185,7 +197,10 @@ def generate_examples() -> List[PilotExample]:
             expected_tool_name=f"confirm_{domain.value}",
             expected_normalized_tool_arguments={"time": "2026-07-26"},
             ambiguity_status=False,
-            expected_clarification_behavior=None
+            expected_clarification_behavior=None,
+            oracle_clean_turns=[
+                ConversationTurn(role="user", content="Schedule an appointment for 2026-07-26.")
+            ]
         )
         examples.append(ex)
 
